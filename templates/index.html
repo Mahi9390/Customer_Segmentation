@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Segmentation</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #1f2933, #0b0e14);
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 900px;
+            padding: 40px;
+            border-radius: 24px;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.08),
+                rgba(255, 255, 255, 0.02)
+            );
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 35px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 6px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(129,140,248,0.3);
+            background-color: rgba(255,255,255,0.15);
+        }
+
+        button {
+            margin-top: 35px;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 16px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: translateX(-100%);
+        }
+
+        button:hover::after {
+            transform: translateX(100%);
+            transition: transform 0.7s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(99,102,241,0.5);
+        }
+
+        .result {
+            margin-top: 35px;
+            padding: 20px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #0f172a, #020617);
+            text-align: center;
+            font-size: 20px;
+            animation: slideUp 0.6s ease;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📊 Customer Segmentation</h1>
+    <p class="subtitle">K-Means Clustering · Real-Time Prediction</p>
+
+    <form method="POST">
+        <div class="grid">
+            <div>
+                <label>Income</label>
+                <input type="number" name="income" required>
+            </div>
+            <div>
+                <label>Recency</label>
+                <input type="number" name="recency" required>
+            </div>
+            <div>
+                <label>Customer Tenure</label>
+                <input type="number" name="customer_tenure" required>
+            </div>
+            <div>
+                <label>Total Spending</label>
+                <input type="number" name="total_spending" required>
+            </div>
+            <div>
+                <label>Total Children</label>
+                <input type="number" name="total_children" required>
+            </div>
+            <div>
+                <label>Web Purchases</label>
+                <input type="number" name="numwebpurchases" required>
+            </div>
+            <div>
+                <label>Catalog Purchases</label>
+                <input type="number" name="numcatalogpurchases" required>
+            </div>
+            <div>
+                <label>Store Purchases</label>
+                <input type="number" name="numstorepurchases" required>
+            </div>
+            <div>
+                <label>Web Visits / Month</label>
+                <input type="number" name="numwebvisitsmonth" required>
+            </div>
+            <div>
+                <label>Accepted Campaigns</label>
+                <input type="number" name="total_accepted_campaigns" required>
+            </div>
+        </div>
+
+        <button type="submit">🚀 Predict Customer Segment</button>
+    </form>
+
+    {% if prediction is not none %}
+        <div class="result">
+            🎯 Segment {{ prediction }}  
+            <div class="badge">{{ segment_name }}</div>
+        </div>
+    {% endif %}
+
+    <footer>
+        ML Model Deployment · Flask · K-Means Clustering
+    </footer>
+</div>
+
+</body>
+</html>
